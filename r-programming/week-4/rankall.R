@@ -62,5 +62,5 @@ rankall <- function(outcome, num = "best") {
     result <<- rbind(result, newRow)
   })
   
-  result
+  as.data.frame(result)
 }
