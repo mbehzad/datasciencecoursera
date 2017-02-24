@@ -43,22 +43,22 @@ setkey(observations, "subject_number", "activity_number")
 
 ## 2 Extracts only the measurements on the mean and standard deviation for each measurement. 
 measurements <- observations %>%
-  select(matches('mean\\(\\)|std\\(\\)'))
+  select(matches('mean\\(\\)|std\\(\\)|subject_number|activity_number'))
 
 ## 3 Uses descriptive activity names to name the activities in the data set
 ## read label names
 activityLabels <- read.table("data/UCI HAR Dataset/activity_labels.txt",header = FALSE)
 ## add labels names according to the activity num
-descriptivActivity <- mutate(observations,
+descriptivActivity <- mutate(measurements,
                activity_lable = activityLabels[activity_number, 2])
 
 
 ## 4 Appropriately labels the data set with descriptive variable names. 
-names(observations)<-gsub("BodyAcc-","Body acceleration signal ",names(observations))
-names(observations)<-gsub("Gyro","(from the gyroscope)",names(observations))
+names(descriptivActivity)<-gsub("BodyAcc-","Body acceleration signal ",names(descriptivActivity))
+names(descriptivActivity)<-gsub("Gyro","(from the gyroscope)",names(descriptivActivity))
 
 ## 5 From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-tidyData <- observations %>% 
+tidyData <- descriptivActivity %>% 
   group_by(subject_number, activity_number) %>% 
   summarise_all(mean)
 
